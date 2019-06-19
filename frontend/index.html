@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+	<button id="login">登陆测试</button>
+	<button id="test">test测试</button>
+
+<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+	<script>
+	var mytoken;
+	//node http-server
+	var login_btn=document.querySelector("#login")
+	var test_btn=document.querySelector("#test")
+
+	// axios拦截器
+	// 拦截请求，给所有的请求都带上token
+	axios.interceptors.request.use(request => {
+	   
+	  if (mytoken) {
+	    // 此处有坑，下方记录
+	    request.headers['Authorization'] =`Bearer ${mytoken}`;
+	  }
+	  return request;
+	});
+ 
+	 
+
+	var baseURL="http://localhost:3000"
+
+	
+ 
+
+	login_btn.addEventListener("click",()=>{
+		axios.get(baseURL+'/api/login').then(res=>{
+			console.log(res.data)
+			mytoken=res.data.token
+		})
+	})
+
+	test_btn.addEventListener("click",()=>{
+		axios.get(baseURL+'/api/test').then(res=>{
+			console.log(res.data)
+		})
+	})
+	</script>
+</body>
+</html>
